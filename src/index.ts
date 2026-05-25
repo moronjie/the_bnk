@@ -1,9 +1,11 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { errorHandler } from './middleware/errorHandler';
 import mongoose from 'mongoose';
 import config from './config';
 import cors from 'cors';
 import { connectDB } from './config/db';
+import redis from './config/redis.config';
 import applyRoutes from './router';
 
 const app = express();
@@ -19,6 +21,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Routes
 app.use('/api', applyRoutes);
@@ -30,6 +33,11 @@ connectDB(
   config.dbUrl!,
   config.dbName!,
 );
+
+redis.connect().catch((err) => {
+  console.error('Failed to connect to Redis:', err);
+  process.exit(1);
+});
 
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);

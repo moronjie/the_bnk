@@ -28,6 +28,14 @@ export const errorCodes = {
 
   // Server Errors
   INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+
+  // OTP & Auth flow
+  OTP_INVALID: 'OTP_INVALID',
+  OTP_EXPIRED: 'OTP_EXPIRED',
+  EMAIL_NOT_VERIFIED: 'EMAIL_NOT_VERIFIED',
+  ACCOUNT_LOCKED: 'ACCOUNT_LOCKED',
+  ACCOUNT_INACTIVE: 'ACCOUNT_INACTIVE',
+  TOO_MANY_REQUESTS: 'TOO_MANY_REQUESTS',
 } as const;
 
 export type ErrorCodes = (typeof errorCodes)[keyof typeof errorCodes];
