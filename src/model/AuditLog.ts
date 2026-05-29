@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 import crypto from 'crypto';
+import { AuditSeverity, ComplianceCategory } from '../types/enums';
 
 export interface IAuditLog extends Document {
   userId?: Types.ObjectId;
@@ -14,8 +15,8 @@ export interface IAuditLog extends Document {
   ipAddress?: string;
   userAgent?: string;
   timestamp: Date;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  complianceCategory: 'KYC' | 'AML' | 'TRANSACTION' | 'ACCESS' | 'SECURITY' | 'OTHER';
+  severity: 'info' | 'warning' | 'error' | 'critical';
+  complianceCategory?: 'aml' | 'kyc' | 'fraud' | 'regulatory' | 'privacy' | 'security';
   requestId?: string;
   sessionId?: string;
   hash: string;
@@ -57,13 +58,12 @@ const auditLogSchema = new Schema<IAuditLog>(
     },
     severity: {
       type: String,
-      enum: ['low', 'medium', 'high', 'critical'],
-      default: 'low',
+      enum: ['info', 'warning', 'error', 'critical'],
+      default: 'info',
     },
     complianceCategory: {
       type: String,
-      enum: ['KYC', 'AML', 'TRANSACTION', 'ACCESS', 'SECURITY', 'OTHER'],
-      required: true,
+      enum: ['aml', 'kyc', 'fraud', 'regulatory', 'privacy', 'security'],
     },
     requestId: String,
     sessionId: String,
